@@ -25,6 +25,8 @@ public class XxlJobLog {
 	private Date triggerTime;
 	private int triggerCode;
 	private String triggerMsg;
+
+	private long nextTriggerTime;
 	
 	// handle info
 	private Date handleTime;
@@ -134,7 +136,7 @@ public class XxlJobLog {
 		return handleCode;
 	}
 
-	public void setHandleCode(int handleCode) {
+	public void setHandleCode (int handleCode) {
 		this.handleCode = handleCode;
 	}
 
@@ -154,4 +156,11 @@ public class XxlJobLog {
 		this.alarmStatus = alarmStatus;
 	}
 
+	public long getNextTriggerTime() {
+		return nextTriggerTime;
+	}
+
+	public void setNextTriggerTime(long nextTriggerTime) {
+		this.nextTriggerTime = nextTriggerTime;
+	}
 }
