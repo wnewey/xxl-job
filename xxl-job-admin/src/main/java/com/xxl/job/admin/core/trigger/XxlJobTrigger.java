@@ -178,11 +178,6 @@ public class XxlJobTrigger {
         // jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
-
-        // if (finalFailRetryCount > 0 && jobInfo.getExecutorFailRetryInterval() > 0) {
-        //     jobLog.setNextTriggerTime(System.currentTimeMillis() + jobInfo.getExecutorFailRetryInterval() * 1000);
-        // }
-
         XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);
 
         logger.debug(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());

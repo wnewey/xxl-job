@@ -118,6 +118,8 @@ public class AdminBizImpl implements AdminBiz {
         // success, save log
         log.setHandleTime(new Date());
         log.setHandleCode(handleCallbackParam.getExecuteResult().getCode());
+
+        // 执行失败，并且设置了重试次数与重试间隔，则添加对应数据
         if (handleCallbackParam.getExecuteResult().getCode() == ReturnT.FAIL_CODE) {
             XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(log.getJobId());
             if (xxlJobInfo.getExecutorFailRetryCount() > 0 && xxlJobInfo.getExecutorFailRetryInterval() > 0) {

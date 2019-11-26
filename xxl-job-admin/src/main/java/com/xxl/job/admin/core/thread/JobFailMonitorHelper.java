@@ -55,10 +55,9 @@ public class JobFailMonitorHelper {
                                 XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(failLogId);
                                 int executorFailRetryCount = log.getExecutorFailRetryCount();
                                 long nextTriggerTime = log.getNextTriggerTime();
+                                // 未到触发时间，直接跳过
                                 if (executorFailRetryCount > 0 && nextTriggerTime > 0) {
                                     if (System.currentTimeMillis() + 1000 < nextTriggerTime) {
-
-                                        System.out.println(System.currentTimeMillis() + ":next trigger:" + nextTriggerTime);
                                         continue;
                                     }
                                 }
