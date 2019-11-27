@@ -75,6 +75,17 @@ public class AdminBizImpl implements AdminBiz {
         }
 
         if (IJobHandler.SUCCESS.getCode() == handleCallbackParam.getExecuteResult().getCode()) {
+
+            if (xxlJobInfo != null) {
+                // 子任务延时执行的，修改延时信息
+                if (xxlJobInfo.getDelayStatus() != 0) {
+                    xxlJobInfo.setDelayStatus(0);
+                    xxlJobInfo.setDelayForParent(0);
+                    xxlJobInfo.setTriggerNextTime(0);
+                    xxlJobInfoDao.scheduleUpdate(xxlJobInfo);
+                }
+            }
+
             if (xxlJobInfo != null && xxlJobInfo.getChildJobId() != null && xxlJobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
@@ -88,9 +99,15 @@ public class AdminBizImpl implements AdminBiz {
                         XxlJobInfo childJob = xxlJobInfoDao.loadById(childJobId);
                         long delaySeconds = childJob.getDelayAsChild();
                         if (delaySeconds > 0) {
-                            childJob.setTriggerNextTime(System.currentTimeMillis() + delaySeconds * 1000);
+                            long nextTriggerTime = System.currentTimeMillis() + delaySeconds * 1000;
+                            childJob.setTriggerNextTime(nextTriggerTime);
+                            childJob.setDelayForParent(xxlJobInfo.getId());
+                            childJob.setDelayStatus(1);
                             xxlJobInfoDao.scheduleUpdate(childJob);
-                            triggerChildResult.setMsg("call child success, delay " + delaySeconds + "s to execute.");
+
+                            String resultMsg = "Call child success.ChildJob [id:" + childJobId + "] delay " + delaySeconds + "seconds to execute.<br/>";
+                            resultMsg += "ChildJob [id:" + childJobId + "] execute time:" + DateUtil.formatDateTime(new Date(nextTriggerTime));
+                            triggerChildResult.setMsg(resultMsg);
                         } else {
                             JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null);
                         }
@@ -114,8 +131,8 @@ public class AdminBizImpl implements AdminBiz {
             if (xxlJobInfo.getExecutorFailRetryCount() > 0 && xxlJobInfo.getExecutorFailRetryInterval() > 0) {
                 long nextTriggerTime = System.currentTimeMillis() + xxlJobInfo.getExecutorFailRetryInterval() * 1000;
                 log.setNextTriggerTime(nextTriggerTime);
-                handleMsg.append("<br/>下次重试时间:").append(DateUtil.formatDateTime(new Date(nextTriggerTime)))
-                        .append("<br/>");
+                handleMsg.append("<br/>下次重试时间:").append(DateUtil.formatDateTime(new Date(nextTriggerTime)));
+                handleMsg.append("<br/>");
             }
         }
 

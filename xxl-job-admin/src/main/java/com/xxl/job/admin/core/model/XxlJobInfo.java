@@ -39,6 +39,9 @@ public class XxlJobInfo {
 
     private int delayAsChild; // 作为子任务时，延时执行时间，单位秒
 
+    private int delayForParent; // 触发延时的任务ID
+    private int delayStatus;  // 任务延时状态 0:默认 1:已触发未执行 2:执行中
+
     private int triggerStatus;        // 调度状态：0-停止，1-运行
     private long triggerLastTime;    // 上次调度时间
     private long triggerNextTime;    // 下次调度时间
@@ -233,5 +236,21 @@ public class XxlJobInfo {
 
     public void setExecutorFailRetryInterval(int executorFailRetryInterval) {
         this.executorFailRetryInterval = executorFailRetryInterval;
+    }
+
+    public int getDelayForParent() {
+        return delayForParent;
+    }
+
+    public void setDelayForParent(int delayForParent) {
+        this.delayForParent = delayForParent;
+    }
+
+    public int getDelayStatus() {
+        return delayStatus;
+    }
+
+    public void setDelayStatus(int delayStatus) {
+        this.delayStatus = delayStatus;
     }
 }

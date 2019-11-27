@@ -194,21 +194,27 @@ $(function () {
           var dataInfo = data ? '<a class="logTips" href="javascript:;" >' + I18n.system_show + '<span style="display:none;">' + data + '</span></a>' : I18n.system_empty;
           var code = row.handleCode;
           var html = row.handleCode;
+          console.log(row.triggerCode)
           if (code == 200) {
             html = '<span style="color: green">【' + I18n.system_success + '】</span>';
           } else if (code == 500) {
             html = '<span style="color: red">【' + I18n.system_fail + '】</span>';
-          } else if (code == 0) {
-            html = '';
+          } else if (row.triggerCode == 200 && code == 0) {
+            html = '<span style="color: cadetblue">【执行中】</span>';
+          }else{
+            return "";
           }
           return html + dataInfo;
         }
       },
       {
         "data": "nextTriggerTime",
-				"width":"15%",
+        "width": "15%",
         "render": function (data, type, row) {
           var html = '';
+          if (row.handleCode != 500) {
+            return html;
+          }
           if (row.executorFailRetryCount) {
             html += "<span>当前重试次数:" + row.executorFailRetryCount + "</span><br/>"
             if (data) {

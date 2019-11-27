@@ -100,6 +100,14 @@ public class XxlJobTrigger {
         ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
         String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
+        // 子任务延时的，更新延时任务状态
+        boolean isDelayJob = false;
+        if (jobInfo.getDelayForParent() != 0) {
+            isDelayJob = true;
+            jobInfo.setDelayStatus(2);
+            XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().scheduleUpdate(jobInfo);
+        }
+
         // 1、save log-id
         XxlJobLog jobLog = new XxlJobLog();
         jobLog.setJobGroup(jobInfo.getJobGroup());
@@ -153,7 +161,12 @@ public class XxlJobTrigger {
 
         // 5、collection trigger info
         StringBuffer triggerMsgSb = new StringBuffer();
-        triggerMsgSb.append(I18nUtil.getString("jobconf_trigger_type")).append("：").append(triggerType.getTitle());
+        triggerMsgSb.append(I18nUtil.getString("jobconf_trigger_type")).append("：");
+        if (isDelayJob) {
+            triggerMsgSb.append(TriggerTypeEnum.PARENT.getTitle()).append("(延时执行)[父任务id:").append(jobInfo.getDelayForParent()).append("]");
+        } else {
+            triggerMsgSb.append(triggerType.getTitle());
+        }
         triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_admin_adress")).append("：").append(IpUtil.getIp());
         triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_exe_regtype")).append("：")
                 .append((group.getAddressType() == 0) ? I18nUtil.getString("jobgroup_field_addressType_0") : I18nUtil.getString("jobgroup_field_addressType_1"));

@@ -225,7 +225,8 @@ public class XxlJobServiceImpl implements XxlJobService {
         exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setDelayAsChild(jobInfo.getDelayAsChild());
-
+        exists_jobInfo.setDelayForParent(jobInfo.getDelayForParent());
+        exists_jobInfo.setDelayStatus(jobInfo.getDelayStatus());
         exists_jobInfo.setUpdateTime(new Date());
         xxlJobInfoDao.update(exists_jobInfo);
 
@@ -275,6 +276,10 @@ public class XxlJobServiceImpl implements XxlJobService {
     public ReturnT<String> stop(int id) {
         XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(id);
 
+        // 延时任务正在执行，则停止延时任务
+        if (xxlJobInfo.getDelayStatus() == 2) {
+            xxlJobInfo.setDelayStatus(0);
+        }
         xxlJobInfo.setTriggerStatus(0);
         xxlJobInfo.setTriggerLastTime(0);
         xxlJobInfo.setTriggerNextTime(0);

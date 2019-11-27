@@ -85,16 +85,27 @@ $(function () {
       {"data": 'alarmEmail', "visible": false},
       {
         "data": 'triggerStatus',
-        "width": '10%',
+        // "width": '15%',
         "visible": true,
         "render": function (data, type, row) {
           // status
+          var triggerInfo = ""
           if (1 == data) {
-            return '<small class="label label-success" >RUNNING</small>';
+            triggerInfo = '<small class="label label-success" >RUNNING</small>';
           } else {
-            return '<small class="label label-default" >STOP</small>';
+            triggerInfo = '<small class="label label-default" >STOP</small>';
           }
-          return data;
+
+          var delayStatus = row.delayStatus;
+          var delayInfo = '';
+          if (delayStatus == 1) {
+            delayInfo = '<small class="label label-success" >等待子任务延时执行。执行时间:</small><br/>'
+              + '<small class="label label-success" >' + moment(new Date(row.triggerNextTime)).format("YYYY-MM-DD HH:mm:ss") + "</small>";
+          }
+          if (delayStatus == 2) {
+            delayInfo = '<small class="label label-success">延时子任务执行中</small>';
+          }
+          return triggerInfo + delayInfo;
         }
       },
       {
