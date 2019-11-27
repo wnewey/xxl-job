@@ -57,7 +57,7 @@ public class JobFailMonitorHelper {
                                 long nextTriggerTime = log.getNextTriggerTime();
                                 // 未到触发时间，直接跳过
                                 if (executorFailRetryCount > 0 && nextTriggerTime > 0) {
-                                    if (System.currentTimeMillis() + 1000 < nextTriggerTime) {
+                                    if (System.currentTimeMillis() / 1000 + 1 < nextTriggerTime / 1000) {
                                         continue;
                                     }
                                 }

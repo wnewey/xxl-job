@@ -14,6 +14,7 @@ import com.xxl.job.core.biz.model.HandleCallbackParam;
 import com.xxl.job.core.biz.model.RegistryParam;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -63,8 +64,17 @@ public class AdminBizImpl implements AdminBiz {
 
         // trigger success, to trigger child job
         String callbackMsg = null;
+        XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(log.getJobId());
+        // handle msg
+        StringBuffer handleMsg = new StringBuffer();
+        if (log.getHandleMsg() != null) {
+            handleMsg.append(log.getHandleMsg()).append("<br>");
+        }
+        if (handleCallbackParam.getExecuteResult().getMsg() != null) {
+            handleMsg.append(handleCallbackParam.getExecuteResult().getMsg());
+        }
+
         if (IJobHandler.SUCCESS.getCode() == handleCallbackParam.getExecuteResult().getCode()) {
-            XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(log.getJobId());
             if (xxlJobInfo != null && xxlJobInfo.getChildJobId() != null && xxlJobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
@@ -99,18 +109,16 @@ public class AdminBizImpl implements AdminBiz {
                                 childJobIds[i]);
                     }
                 }
-
+            }
+        } else {
+            if (xxlJobInfo.getExecutorFailRetryCount() > 0 && xxlJobInfo.getExecutorFailRetryInterval() > 0) {
+                long nextTriggerTime = System.currentTimeMillis() + xxlJobInfo.getExecutorFailRetryInterval() * 1000;
+                log.setNextTriggerTime(nextTriggerTime);
+                handleMsg.append("<br/>下次重试时间:").append(DateUtil.formatDateTime(new Date(nextTriggerTime)))
+                        .append("<br/>");
             }
         }
 
-        // handle msg
-        StringBuffer handleMsg = new StringBuffer();
-        if (log.getHandleMsg() != null) {
-            handleMsg.append(log.getHandleMsg()).append("<br>");
-        }
-        if (handleCallbackParam.getExecuteResult().getMsg() != null) {
-            handleMsg.append(handleCallbackParam.getExecuteResult().getMsg());
-        }
         if (callbackMsg != null) {
             handleMsg.append(callbackMsg);
         }
@@ -118,14 +126,7 @@ public class AdminBizImpl implements AdminBiz {
         // success, save log
         log.setHandleTime(new Date());
         log.setHandleCode(handleCallbackParam.getExecuteResult().getCode());
-
         // 执行失败，并且设置了重试次数与重试间隔，则添加对应数据
-        if (handleCallbackParam.getExecuteResult().getCode() == ReturnT.FAIL_CODE) {
-            XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(log.getJobId());
-            if (xxlJobInfo.getExecutorFailRetryCount() > 0 && xxlJobInfo.getExecutorFailRetryInterval() > 0) {
-                log.setNextTriggerTime(System.currentTimeMillis() + xxlJobInfo.getExecutorFailRetryInterval() * 1000);
-            }
-        }
         log.setHandleMsg(handleMsg.toString());
         xxlJobLogDao.updateHandleInfo(log);
 
