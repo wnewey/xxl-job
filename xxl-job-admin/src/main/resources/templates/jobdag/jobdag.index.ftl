@@ -7,7 +7,7 @@
     <link rel="stylesheet"
           href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <title>${I18n.admin_name}</title>
-    <script src="https://cdn.bootcss.com/mermaid/8.3.1/mermaid.min.js"></script>
+    <script src="${request.contextPath}/static/mermaid/mermaid.8.4.3.min.js"></script>
     <script>
       document.onreadystatechange = function () {
         if (document.readyState === 'complete') {
