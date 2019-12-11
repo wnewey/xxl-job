@@ -244,6 +244,7 @@
 			(handle_code = 200)
 		)
 		AND `alarm_status` = 0
+		OR  ( `next_trigger_time` > 0 and `executor_fail_retry_count`>0 )
 		ORDER BY id ASC
 		LIMIT #{pagesize}
 	</select>
