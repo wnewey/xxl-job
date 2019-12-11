@@ -1,7 +1,7 @@
 <#macro commonStyle>
 
 	<#-- favicon -->
-	<link rel="icon" href="${request.contextPath}/static/favicon.ico" />
+<#--	<link rel="icon" href="${request.contextPath}/static/favicon.ico" />-->
 
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,7 +67,7 @@
 <#macro commonHeader>
 	<header class="main-header">
 		<a href="${request.contextPath}/" class="logo">
-			<span class="logo-mini"><b>XXL</b></span>
+			<span class="logo-mini"><b></b></span>
 			<span class="logo-lg"><b>${I18n.admin_name}</b></span>
 		</a>
 		<nav class="navbar navbar-static-top" role="navigation">
@@ -135,13 +135,14 @@
 			<ul class="sidebar-menu">
                 <li class="header">${I18n.system_nav}</li>
                 <li class="nav-click <#if pageName == "index">active</#if>" ><a href="${request.contextPath}/"><i class="fa fa-circle-o text-aqua"></i><span>${I18n.job_dashboard_name}</span></a></li>
+				<li class="nav-click <#if pageName == "jobdag">active</#if>" ><a href="${request.contextPath}/jobdag"><i class="fa fa-circle-o text-fuchsia"></i><span>${I18n.jobdag_name}</span></a></li>
 				<li class="nav-click <#if pageName == "jobinfo">active</#if>" ><a href="${request.contextPath}/jobinfo"><i class="fa fa-circle-o text-yellow"></i><span>${I18n.jobinfo_name}</span></a></li>
 				<li class="nav-click <#if pageName == "joblog">active</#if>" ><a href="${request.contextPath}/joblog"><i class="fa fa-circle-o text-green"></i><span>${I18n.joblog_name}</span></a></li>
 				<#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>
                     <li class="nav-click <#if pageName == "jobgroup">active</#if>" ><a href="${request.contextPath}/jobgroup"><i class="fa fa-circle-o text-red"></i><span>${I18n.jobgroup_name}</span></a></li>
                     <li class="nav-click <#if pageName == "user">active</#if>" ><a href="${request.contextPath}/user"><i class="fa fa-circle-o text-purple"></i><span>${I18n.user_manage}</span></a></li>
 				</#if>
-				<li class="nav-click <#if pageName == "help">active</#if>" ><a href="${request.contextPath}/help"><i class="fa fa-circle-o text-gray"></i><span>${I18n.job_help}</span></a></li>
+<#--				<li class="nav-click <#if pageName == "help">active</#if>" ><a href="${request.contextPath}/help"><i class="fa fa-circle-o text-gray"></i><span>${I18n.job_help}</span></a></li>-->
 			</ul>
 		</section>
 		<!-- /.sidebar -->
@@ -227,13 +228,13 @@
 
 <#macro commonFooter >
 	<footer class="main-footer">
-        Powered by <b>XXL-JOB</b> ${I18n.admin_version}
-		<div class="pull-right hidden-xs">
-            <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
-                <a href="https://www.xuxueli.com/" target="_blank" >xuxueli</a>
+<#--        Powered by <b>XXL-JOB</b> ${I18n.admin_version}-->
+<#--		<div class="pull-right hidden-xs">-->
+<#--            <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;-->
+<#--                <a href="https://www.xuxueli.com/" target="_blank" >xuxueli</a>-->
 				&nbsp;
-                <a href="https://github.com/xuxueli/xxl-job" target="_blank" >github</a>
-            </strong><!-- All rights reserved. -->
-		</div>
+<#--                <a href="https://github.com/xuxueli/xxl-job" target="_blank" >github</a>-->
+<#--            </strong><!-- All rights reserved. &ndash;&gt;-->
+<#--		</div>-->
 	</footer>
 </#macro>

@@ -242,6 +242,19 @@
         LIMIT #{pagesize}
     </select>
 
+    <select id="dagJobList" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM xxl_job_info AS t
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="permission != null and permission != ''">
+                AND t.job_group in (#{permission})
+            </if>
+        </trim>
+        ORDER BY id asc
+    </select>
+
+
     <update id="scheduleUpdate" parameterType="com.xxl.job.admin.core.model.XxlJobInfo">
 		UPDATE xxl_job_info
 		SET
