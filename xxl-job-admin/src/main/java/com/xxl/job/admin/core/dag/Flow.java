@@ -43,6 +43,9 @@ public class Flow {
             strbuf.append(start.parseToString());
             if (stop != null) {
                 strbuf.append("-->");
+                if (stop.getJob() != null && stop.getJob().getDelayAsChild() > 0) {
+                    strbuf.append("|").append("延迟" + stop.getJob().getDelayAsChild() + "秒").append("|");
+                }
                 strbuf.append(stop.parseToString());
             }
             strbuf.append(";\n");

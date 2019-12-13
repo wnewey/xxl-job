@@ -70,7 +70,12 @@ public class JobDAGController {
                     XxlJobInfo childJob = xxlJobInfoDao.loadById(Integer.parseInt(cid));
                     if (childJob != null) {
                         Node start = new Node(String.valueOf(xxlJobInfo.getId()), xxlJobInfo.getJobDesc());
+                        start.setActive(xxlJobInfo.getTriggerStatus() == 1);
+                        start.setJob(xxlJobInfo);
                         Node stop = new Node(String.valueOf(childJob.getId()), childJob.getJobDesc());
+                        stop.setActive(xxlJobInfo.getTriggerStatus() == 1);
+                        stop.setJob(childJob);
+
                         subGraph.addNode(start);
                         if (String.valueOf(childJob.getJobGroup()).equals(subGraph.getId())) {
                             subGraph.addNode(stop);
@@ -85,6 +90,8 @@ public class JobDAGController {
             } else {
                 Flow flow = new Flow();
                 Node start = new Node(String.valueOf(xxlJobInfo.getId()), xxlJobInfo.getJobDesc());
+                start.setActive(xxlJobInfo.getTriggerStatus() == 1);
+                start.setJob(xxlJobInfo);
                 flow.setStart(start);
                 subGraph.addNode(start);
             }

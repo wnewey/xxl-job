@@ -91,7 +91,7 @@ $(function () {
           // status
           var triggerInfo = ""
           if (1 == data) {
-            triggerInfo = '<small class="label label-success" >RUNNING</small>';
+            triggerInfo = '<small class="label label-success" >ACTIVE</small>';
           } else {
             triggerInfo = '<small class="label label-default" >STOP</small>';
           }

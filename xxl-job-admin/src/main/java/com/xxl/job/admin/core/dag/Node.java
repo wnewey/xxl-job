@@ -1,5 +1,7 @@
 package com.xxl.job.admin.core.dag;
 
+import com.xxl.job.admin.core.model.XxlJobInfo;
+
 /**
  * Node
  * @author newey
@@ -10,6 +12,9 @@ public class Node {
 
     private String id;
     private String desc;
+    private boolean active;
+
+    private XxlJobInfo job;
 
     public Node(String id, String desc) {
         this.id = id;
@@ -30,6 +35,22 @@ public class Node {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public XxlJobInfo getJob() {
+        return job;
+    }
+
+    public void setJob(XxlJobInfo job) {
+        this.job = job;
     }
 
     public String parseToString() {

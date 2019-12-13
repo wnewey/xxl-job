@@ -84,6 +84,10 @@ public class SubGraph {
             for (String nodeId : nodes.keySet()) {
                 Node node = nodes.get(nodeId);
                 strbuf.append("\t").append(node.parseToString(true));
+                if (node.isActive()) {
+                    strbuf.append("\tclass ").append(nodeId).append(" active").append("\n");
+                }
+                strbuf.append("\tclick ").append(nodeId).append(" nodeCallback\n");
             }
         }
         strbuf.append("end;\n");

@@ -88,6 +88,7 @@ public class Graph {
     public String parseToString() {
         StringBuffer strbuf = new StringBuffer();
         strbuf.append("graph ").append(direction).append(";\n");
+        strbuf.append("classDef active fill:#00a65a\n");
         if (subGraphs != null) {
             for (String subGraphId : subGraphs.keySet()) {
                 SubGraph subGraph = subGraphs.get(subGraphId);
