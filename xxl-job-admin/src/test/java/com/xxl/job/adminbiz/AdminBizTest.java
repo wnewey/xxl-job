@@ -1,16 +1,11 @@
 package com.xxl.job.adminbiz;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.xxl.job.admin.core.util.JacksonUtil;
 import com.xxl.job.core.biz.AdminBiz;
 import com.xxl.job.core.biz.client.AdminBizClient;
 import com.xxl.job.core.biz.model.HandleCallbackParam;
 import com.xxl.job.core.biz.model.RegistryParam;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.RegistryConfig;
-import com.xxl.registry.client.util.json.BasicJson;
-import net.minidev.json.JSONObject;
-import net.minidev.json.JSONUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,8 +35,6 @@ public class AdminBizTest {
         param.setExecuteResult(returnTi);
 
         List<HandleCallbackParam> callbackParamList = Arrays.asList(param);
-
-        System.out.println(BasicJson.toJson(callbackParamList));
 
         ReturnT<String> returnT = adminBiz.callback(callbackParamList);
 

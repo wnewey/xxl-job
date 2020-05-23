@@ -93,6 +93,8 @@ public class AdminBizImpl implements AdminBiz {
                 for (int i = 0; i < childJobIds.length; i++) {
                     int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.valueOf(childJobIds[i]) : -1;
                     if (childJobId > 0) {
+
+                        JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null, null);
                         ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
 
                         // 子任务有延时设置时，根据延时设置下次触发时间
@@ -109,7 +111,7 @@ public class AdminBizImpl implements AdminBiz {
                             resultMsg += "ChildJob [id:" + childJobId + "] execute time:" + DateUtil.formatDateTime(new Date(nextTriggerTime));
                             triggerChildResult.setMsg(resultMsg);
                         } else {
-                            JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null);
+                            JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null,null);
                         }
 
                         // add msg
@@ -126,6 +128,7 @@ public class AdminBizImpl implements AdminBiz {
                                 childJobIds[i]);
                     }
                 }
+
             }
         } else {
             if (xxlJobInfo.getExecutorFailRetryCount() > 0 && xxlJobInfo.getExecutorFailRetryInterval() > 0) {
@@ -135,15 +138,20 @@ public class AdminBizImpl implements AdminBiz {
                 handleMsg.append("<br/>");
             }
         }
-
+        if (handleCallbackParam.getExecuteResult().getMsg() != null) {
+            handleMsg.append(handleCallbackParam.getExecuteResult().getMsg());
+        }
         if (callbackMsg != null) {
             handleMsg.append(callbackMsg);
+        }
+
+        if (handleMsg.length() > 15000) {
+            handleMsg = new StringBuffer(handleMsg.substring(0, 15000));  // text最大64kb 避免长度过长
         }
 
         // success, save log
         log.setHandleTime(new Date());
         log.setHandleCode(handleCallbackParam.getExecuteResult().getCode());
-        // 执行失败，并且设置了重试次数与重试间隔，则添加对应数据
         log.setHandleMsg(handleMsg.toString());
         xxlJobLogDao.updateHandleInfo(log);
 

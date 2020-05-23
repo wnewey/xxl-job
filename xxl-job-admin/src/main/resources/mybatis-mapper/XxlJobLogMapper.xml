@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxl.job.admin.dao.XxlJobLogDao">
 
     <resultMap id="XxlJobLog" type="com.xxl.job.admin.core.model.XxlJobLog">
@@ -163,8 +163,7 @@
 		SET 
 			`handle_time`= #{handleTime}, 
 			`handle_code`= #{handleCode},
-			`handle_msg`= #{handleMsg},
-			`next_trigger_time`=#{nextTriggerTime}
+			`handle_msg`= #{handleMsg} 
 		WHERE `id`= #{id}
 	</update>
 
@@ -255,5 +254,17 @@
 			`alarm_status` = #{newAlarmStatus}
 		WHERE `id`= #{logId} AND `alarm_status` = #{oldAlarmStatus}
 	</update>
+
+    <select id="findLostJobIds" resultType="long" >
+		SELECT t.id
+		FROM xxl_job_log AS t
+		WHERE t.trigger_code = 200
+			and t.handle_code = 0
+			and t.trigger_time <![CDATA[ <= ]]> #{losedTime}
+			and t.executor_address not in (
+				SELECT t2.registry_value
+				FROM xxl_job_registry AS t2
+			)
+	</select>
 
 </mapper>

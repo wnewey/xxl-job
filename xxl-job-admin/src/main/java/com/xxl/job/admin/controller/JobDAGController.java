@@ -59,7 +59,7 @@ public class JobDAGController {
             } else {
                 XxlJobGroup jobGroup = xxlJobGroupDao.load(xxlJobInfo.getJobGroup());
                 if (jobGroup != null) {
-                    subGraph = new SubGraph(String.valueOf(jobGroup.getId()), jobGroup.getAppName());
+                    subGraph = new SubGraph(String.valueOf(jobGroup.getId()), jobGroup.getAppname());
                     graph.addSubGraph(subGraph);
                 }
             }
