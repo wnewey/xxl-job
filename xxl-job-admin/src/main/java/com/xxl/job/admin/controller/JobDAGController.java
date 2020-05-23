@@ -73,7 +73,7 @@ public class JobDAGController {
                         start.setActive(xxlJobInfo.getTriggerStatus() == 1);
                         start.setJob(xxlJobInfo);
                         Node stop = new Node(String.valueOf(childJob.getId()), childJob.getJobDesc());
-                        stop.setActive(xxlJobInfo.getTriggerStatus() == 1);
+                        stop.setActive(childJob.getTriggerStatus() == 1);
                         stop.setJob(childJob);
 
                         subGraph.addNode(start);

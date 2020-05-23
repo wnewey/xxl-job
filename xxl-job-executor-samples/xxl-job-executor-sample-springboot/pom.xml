@@ -15,9 +15,6 @@
     <description>Example executor project for spring boot.</description>
     <url>https://www.xuxueli.com/</url>
 
-    <properties>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>

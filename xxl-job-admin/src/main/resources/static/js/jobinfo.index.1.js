@@ -441,6 +441,18 @@ $(function () {
       }
       $("#addModal .form input[name='executorFailRetryCount']").val(executorFailRetryCount);
 
+      var delayAsChild = $("#addModal .form input[name='delayAsChild']").val();
+      if (!/^\d+$/.test(delayAsChild)) {
+        delayAsChild = 0;
+      }
+      $("#addModal .form input[name='delayAsChild']").val(delayAsChild);
+
+      var executorFailRetryInterval = $("#addModal .form input[name='executorFailRetryInterval']").val();
+      if (!/^\d+$/.test(executorFailRetryInterval)) {
+        executorFailRetryInterval = 0;
+      }
+      $("#addModal .form input[name='executorFailRetryInterval']").val(executorFailRetryInterval);
+
       // process-cronGen
       $("#addModal .form input[name='jobCron']").val($("#addModal .form input[name='cronGen_display']").val());
 
