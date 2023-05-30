@@ -17,6 +17,7 @@ import com.xxl.job.admin.core.model.XxlJobUser;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
 import com.xxl.job.admin.service.LoginService;
+import com.xxl.job.core.util.GsonTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -96,7 +97,8 @@ public class JobDAGController {
                 subGraph.addNode(start);
             }
         }
-        request.setAttribute("graphstr", graph.parseToString());
+        // request.setAttribute("graphstr", graph.parseToString());
+        request.setAttribute("graphstr", GsonTool.toJson(graph));
         return "jobdag/jobdag.index";
     }
 }
